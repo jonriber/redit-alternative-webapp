@@ -10,4 +10,6 @@ Going further on Next.js studies, this web app main objective is to be an altern
 
 ![alt text](image-1.png)
 
+### Create a route information Table
 
+![alt text](image-2.png)
