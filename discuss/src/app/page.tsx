@@ -1,7 +1,11 @@
 import { Button } from '@nextui-org/button'
 import * as actions from '@/actions';
+import { auth } from '@/auth';
+import Profile from '@/components/profile';
+export default async function Home() {
 
-export default function Home() {
+  const session = await auth();
+
   return (
     <div className='container flex flex-row gap-4'>
       <form action={actions.signIn}>
@@ -11,6 +15,14 @@ export default function Home() {
       <form action={actions.signOut}>
         <Button type='submit'>Sign Out</Button>
       </form>
+
+      {session?.user ? 
+        <div>{JSON.stringify(session.user)}</div>
+        :
+        <div>Signed Out</div>
+      }
+
+      <Profile />
     </div>
   )
 }
