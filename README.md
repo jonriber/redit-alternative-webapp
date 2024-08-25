@@ -21,3 +21,7 @@ Going further on Next.js studies, this web app main objective is to be an altern
 ## Caching options with client component
 
 ![alt text](image-4.png)
+
+## useFormState typing error
+
+![alt text](image-5.png)
