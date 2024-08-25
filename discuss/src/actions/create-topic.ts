@@ -1,6 +1,11 @@
 'use server'
 import {z} from 'zod';
+import { revalidatePath } from 'next/cache';
 import { auth } from '@/auth';
+import type { Topic } from '@prisma/client';
+import { redirect } from 'next/navigation';
+import { db } from '@/db';
+import paths from '@/paths';
 
 const createTopicSchema = z.object({
   name: z.string().min(3).regex(/^[a-z-]+$/, {message: 'name must be lowercase or dashes'}),
@@ -30,15 +35,43 @@ export async function createTopic(formState:CreateTopicFormState, formData: Form
   }
 
   const session = await auth();
+  console.log("session",session);
 
   if (!session || !session.user){
-    errors:{
-      _form: ['You must be signed in to create a topic']
+    return {
+      errors:{
+        _form: ['You must be signed in to create a topic']
+      }
     }
   }
 
-  return {
-    errors: {}
+  let topic: Topic;
+  try{
+
+    // throw new Error('Simulation Error!!');
+    topic = await db.topic.create({
+      data: {
+        slug: result.data.name,
+        description: result.data.description,
+      }
+    })
+  } catch(err:unknown){
+    if (err instanceof Error){
+      return {
+        errors: {
+          _form: [err.message]
+        }
+      }
+    }else {
+      return {
+        errors: {
+          _form: ['An error occurred']
+        }
+      }
+    }
   }
+
+  revalidatePath('/');
+  redirect(paths.topicShow(topic.slug));
 
 }
