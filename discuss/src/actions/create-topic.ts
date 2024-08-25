@@ -1,5 +1,6 @@
 'use server'
 import {z} from 'zod';
+import { auth } from '@/auth';
 
 const createTopicSchema = z.object({
   name: z.string().min(3).regex(/^[a-z-]+$/, {message: 'name must be lowercase or dashes'}),
@@ -10,6 +11,7 @@ interface CreateTopicFormState {
   errors: {
     name?: String[],
     description?: String[],
+    _form?: String[];
   }
 }
 
@@ -24,6 +26,14 @@ export async function createTopic(formState:CreateTopicFormState, formData: Form
   if (!result.success){
     return {
       errors: result.error.flatten().fieldErrors
+    }
+  }
+
+  const session = await auth();
+
+  if (!session || !session.user){
+    errors:{
+      _form: ['You must be signed in to create a topic']
     }
   }
 
