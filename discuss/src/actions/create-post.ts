@@ -43,9 +43,45 @@ export async function createPost(slug:string,formState: CreatePostFormState, for
     }
   }
 
+  const topic = await db.topic.findFirst({
+    where: { slug }
+  })
 
-
-  return {
-    errors: {}
+  if (!topic) {
+    return {
+      errors: {
+        _form: ['Topic not found']
+      }
+    }
   }
+
+let post: Post;
+ try {
+  post = await db.post.create({
+    data: {
+      title: result.data.title,
+      content: result.data.content,
+      topicId: topic.id,
+      userId: session.user.id,
+    }
+  })
+ } catch (err: unknown){
+    if (err instanceof Error){
+      return {
+        errors: {
+          _form: [err.message]
+        }
+      }
+    } else {
+      return {
+        errors: {
+          _form: ['Failed to create post']
+        }
+      }
+    }
+ }
+
+  revalidatePath(paths.topicShow(slug));
+  redirect(paths.postShow(slug, post.id));
+
 }
