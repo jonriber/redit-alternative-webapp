@@ -20,7 +20,7 @@ const createPostSchema = z.object({
   content: z.string().min(10),
 });
 
-export async function createPost(formState: CreatePostFormState, formData: FormData): Promise<CreatePostFormState>{ 
+export async function createPost(slug:string,formState: CreatePostFormState, formData: FormData): Promise<CreatePostFormState>{ 
   // TODO: revalidate topicShow page
   const result = createPostSchema.safeParse({
     title: formData.get('title'),
@@ -32,6 +32,18 @@ export async function createPost(formState: CreatePostFormState, formData: FormD
       errors: result.error.flatten().fieldErrors
     }
   }
+
+  const session = await auth();
+
+  if( !session || !session.user){
+    return {
+      errors: {
+        _form: ['You must be signed in to create a post']
+      }
+    }
+  }
+
+
 
   return {
     errors: {}
