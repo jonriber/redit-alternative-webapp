@@ -31,3 +31,7 @@ Going further on Next.js studies, this web app main objective is to be an altern
 ![alt text](image-6.png)
 
 ![alt text](image-7.png)
+
+## Precious Software Design Tips
+
+![alt text](image-8.png)
