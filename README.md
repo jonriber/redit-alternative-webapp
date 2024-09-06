@@ -35,3 +35,4 @@ Going further on Next.js studies, this web app main objective is to be an altern
 ## Precious Software Design Tips
 
 ![alt text](image-8.png)
+
