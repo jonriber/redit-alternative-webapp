@@ -25,3 +25,9 @@ Going further on Next.js studies, this web app main objective is to be an altern
 ## useFormState typing error
 
 ![alt text](image-5.png)
+
+## Search feature
+
+![alt text](image-6.png)
+
+![alt text](image-7.png)
